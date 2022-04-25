@@ -27,7 +27,7 @@ class IBO_ICON {
         this.font_weight = "900";
         this.icon_background = "#9b4dca";
         this.icon_class = "fas fa-address-card";
-        this.icon_width = "300";
+        this.icon_width = 300;
         this.odoo_version = "13.0";
 
         // overwrite default parameter
@@ -249,8 +249,8 @@ class IBO_ICON {
 
     _setHardShadow() {
         for (let i = 0; i < (this.icon_width * (2 / 3)); i++) {
-            const tmp_width = (parseInt(this.icon_width) - 2 * i) / 2;
-            const tmp_height = (parseInt(this.icon_width) + 2 * i) / 2;
+                const tmp_width = (this.icon_width - 2 * i) / 2;
+                const tmp_height = (this.icon_width + 2 * i) / 2;
 
             this._setText(
                 this.icon_text,
@@ -288,8 +288,8 @@ class IBO_ICON {
         this._setText(
             this.icon_text,
             this.font_color,
-            parseInt(this.icon_width) / 2,
-            parseInt(this.icon_width) / 2,
+            this.icon_width / 2,
+            this.icon_width / 2,
             this.font_size
         );
         this._ctx.restore();
