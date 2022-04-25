@@ -126,6 +126,17 @@
 
                 <div class="row">
                     <div class="column column-center">
+                        <label for="imgSrc">Image</label>
+                        <span class="hint-text">Square images work best</span>
+                    </div>
+                    <div class="column">
+                        <input type="file" id="file-input" />
+                        <button class="button button-outline clear-file-btn"><i class="fas fa-trash-alt"></i> clear file</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="column column-center">
                         <label for="iconBackgroundColor">Icon Background Color</label>
                     </div>
                     <div class="column">
@@ -143,6 +154,7 @@
                             <button class="button" type="submit" value="Download" onclick="download()">Download</button>
                         </a>
                         <input class="button button-outline" type="submit" value="Generate" onclick="generate()">
+                        <span class="no-image-error" class="file-error">The selected file is not an image.</span>
                     </div>
                 </div>
 
@@ -330,7 +342,27 @@ icon.draw("icon");
 
     <script>
 
+        const clear_file_btn = document.querySelector('.clear-file-btn');
+        const input_field = document.querySelector("#file-input");
+        const no_image_error = document.querySelector('.no-image-error');
+
+        clear_file_btn.addEventListener('click', (e)=>{
+            e.target.style.display = 'none';
+            input_field.value = null;
+            no_image_error.style.display = 'none';
+        })
+
+        input_field.addEventListener('change', (e) => {
+            no_image_error.style.display = 'none';
+            if (e.target.value) {
+                clear_file_btn.style.display = 'inline-block';
+            } else {
+                clear_file_btn.style.display = 'none';
+            }
+        });
+
         document.addEventListener("DOMContentLoaded", function () {
+            input_field.value = null;
             let icon = new IBO_ICON({
                 'font_family': 'bootstrap-icons',
                 'icon_class': 'bi bi-droplet',
@@ -383,7 +415,6 @@ icon.draw("icon");
                     break;
             }
         }
-
     </script>
 </body>
 

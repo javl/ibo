@@ -29,6 +29,9 @@ class IBO_ICON {
         this.icon_class = "fas fa-address-card";
         this.icon_width = 300;
         this.odoo_version = "13.0";
+        this.img = null;
+        this.img_shadow = null;
+        this.img_settings = {};
 
         // overwrite default parameter
         if (settings != null) {
@@ -37,7 +40,7 @@ class IBO_ICON {
 
         // calculate default parameter if not set manually in settings
         if (settings != null && !("font_size" in settings)) {
-            this.font_size = parseInt(this.icon_width) * 0.5;
+            this.font_size = this.icon_width * 0.5;
         }
         if (settings != null && !("icon_text" in settings)) {
             let ufw = this._getUnicodeAndFontWeight(this.icon_class);
@@ -62,10 +65,12 @@ class IBO_ICON {
         document.fonts.ready.then(() => this._draw(element));
     };
 
-    _draw(element) {
+    async _draw(element) {
         this._setUp();
+        await this._setupImage();
         this._setBackground();
         this._setHardShadow();
+        this._setMainImage();
         this._setTextWithShadow();
         this._setInlineShadow();
         this._setGradient();
@@ -83,6 +88,88 @@ class IBO_ICON {
 
         this._ctx = this.canvas.getContext("2d");
         this._ctx.font = `${this.font_weight} ${this.font_size}px "${this.font_family}"`;
+    }
+
+    _setupImage() {
+        this.img = null;
+        this.img_shadow = null;
+
+        const fileInput = document.querySelector("#file-input");
+        if (fileInput.files.length == 0) {
+            return;
+        }
+        if (!fileInput.files[0].type.match("image.*")) {
+            document.querySelector('.no-image-error').style.display = 'block';
+            return;
+        }
+
+        return new Promise((resolve, reject) => {
+            this.img = new Image();
+            this.img.onload = () => {
+                // first store a bunch of values used for drawing later
+                this.img_settings = {};
+                if (this.img.width > this.img.height) {
+                    this.img_settings.scale = this.canvas.width / this.img.width;
+                    this.img_settings.ratio = this.img.height / this.img.width;
+                    this.img_settings.x = 0;
+                    this.img_settings.y = this.canvas.height / 2 - (this.img.height * this.img_settings.scale) / 2;
+                    this.img_settings.w = this.canvas.width;
+                    this.img_settings.h = this.canvas.height * this.img_settings.ratio;
+                } else {
+                    this.img_settings.scale = this.canvas.height / this.img.height;
+                    this.img_settings.ratio = this.img.width / this.img.height;
+                    this.img_settings.x = this.canvas.width / 2 - (this.img.width * this.img_settings.scale) / 2;
+                    this.img_settings.y = 0;
+                    this.img_settings.w = this.canvas.width * this.img_settings.ratio;
+                    this.img_settings.h = this.canvas.height;
+                }
+
+                // Like with the text we'll draw the image multiple times to create a shadow. For this we use a
+                // temporary canvas we can tint
+                const svgCanvas = document.createElement("canvas");
+                svgCanvas.width = this.canvas.width;
+                svgCanvas.height = this.canvas.height;
+                const svgCtx = svgCanvas.getContext("2d");
+                svgCtx.drawImage(
+                    this.img,
+                    0, 0,
+                    this.img.width, this.img.height,
+                    this.img_settings.x, this.img_settings.y,
+                    this.img_settings.w, this.img_settings.h);
+
+                const svgData = svgCtx.getImageData(0, 0, svgCanvas.width, svgCanvas.height);
+                const data = svgData.data;
+
+                const shadowHex = this._pSBC(-0.4, this.icon_background).match(/[^#]{1,2}/g)
+                const shadowRgb = [
+                    parseInt(shadowHex[0], 16),
+                    parseInt(shadowHex[1], 16),
+                    parseInt(shadowHex[2], 16)
+                ];
+
+                for (let i = 0; i < data.length; i += 4) {
+                    if (data[i + 3] !== 0) { // skip pixels with alpha
+                        data[i] = shadowRgb[0];
+                        data[i + 1] = shadowRgb[1];
+                        data[i + 2] = shadowRgb[2];
+                    }
+                }
+                // svgCtx.putImageData(svgData, 0, 0, 0, 0, this.img_settings.w, this.img_settings.h);
+                svgCtx.putImageData(svgData, 0, 0);
+                this.img_shadow = new Image();
+                this.img_shadow.onload = () => {
+                    resolve();
+                }
+                this.img_shadow.src = svgCanvas.toDataURL();
+            }
+
+            var reader = new FileReader();
+            reader.readAsDataURL(fileInput.files[0]);
+            reader.onload = (file) => {
+                // this.img.crossOrigin = "anonymous";
+                this.img.src = file.target.result;
+            }
+        })
     }
 
     /**
@@ -129,6 +216,10 @@ class IBO_ICON {
      * @param {*} centerY   - text position on the y achsis of the canvas
      */
     _setText(text, color, centerX, centerY, font_size) {
+        // skip if no text set
+        if (text == "none") {
+            return;
+        }
         this._ctx.save();
         this._ctx.fillStyle = color;
         this._ctx.font = `${this.font_weight} ${font_size}px "${this.font_family}"`;
@@ -136,6 +227,62 @@ class IBO_ICON {
         this._ctx.textBaseline = "middle";
         this._ctx.fillText(`${text}`, centerX, centerY);
         this._ctx.restore();
+    }
+
+    /**
+     * Helper function to draw the main image to the canvas
+     */
+     _setMainImage() {
+        if (this.img !== null) {
+            this._setImage(this.img, 0, 0);
+        }
+    }
+
+    /**
+     * Function to draw svg/image to the canvas.
+     * @param {*} img       - what image to draw
+     * @param {*} x_offset  - offset x position of image
+     * @param {*} y_offset  - offset y position of image
+     */
+     _setImage(img, x_offset, y_offset) {
+        this._ctx.drawImage(
+            img,
+            x_offset, y_offset,
+            img.width, img.height,
+            this.img_settings.x, this.img_settings.y,
+            this.img_settings.w, this.img_settings.h);
+        }
+
+    /**
+     * Function to draw img to the canvas with some shadow.
+     */
+    _setImageWithShadow() {
+        if (this.img === null) {
+            return;
+        }
+
+        this._ctx.save();
+
+        // switch (this.odoo_version) {
+        //     case "11.0":
+        //         break;
+        //     case "12.0":
+        //     case "13.0":
+        //     case "14.0":
+        //     case "15.0":
+        //         this._ctx.shadowOffsetX = 0;
+        //         this._ctx.shadowOffsetY = this.icon_width * 0.02;
+        //         this._ctx.shadowBlur = 0;
+        //         this._ctx.shadowColor = "rgba(0, 0, 0, 0.4)";
+        //         break;
+        //     default:
+        //         console.log("Unsupported version selected.");
+        //         break;
+        // }
+
+        this._setImage(this.img, 0, 0);
+        this._ctx.restore();
+
     }
 
     /**
@@ -248,17 +395,27 @@ class IBO_ICON {
     };
 
     _setHardShadow() {
-        for (let i = 0; i < (this.icon_width * (2 / 3)); i++) {
+        if (this.icon_text != "none") {
+            for (let i = 0; i < (this.icon_width * (2 / 3)); i++) {
                 const tmp_width = (this.icon_width - 2 * i) / 2;
                 const tmp_height = (this.icon_width + 2 * i) / 2;
 
-            this._setText(
-                this.icon_text,
-                this._pSBC(-0.4, this.icon_background),
-                tmp_width,
-                tmp_height,
-                this.font_size
-            );
+                this._setText(
+                    this.icon_text,
+                    this._pSBC(-0.4, this.icon_background),
+                    tmp_width,
+                    tmp_height,
+                    this.font_size
+                );
+            }
+        }
+
+        if (this.img_shadow !== null) {
+            for (let i = 0; i < this.img_shadow.width / 2; i++) {
+                const x_offset = ((this.icon_width - 2 * i) / 2) - (this.img_shadow.width / 2);
+                const y_offset = ((this.icon_width + 2 * i) / 2) - (this.img_shadow.width / 2);
+                this._setImage(this.img_shadow, -x_offset, -y_offset);
+            }
         }
     }
 
@@ -266,6 +423,11 @@ class IBO_ICON {
      * Sets a lighter shadow that extends to the lower left corner of the icon.
      */
     _setTextWithShadow() {
+        // skip if there is no icon set
+        if (this.icon_text == "none") {
+            return;
+        }
+
         this._ctx.save();
 
         switch (this.odoo_version) {

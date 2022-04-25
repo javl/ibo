@@ -53,3 +53,24 @@ footer {
     font-size: 2rem;
     vertical-align: middle;
 }
+
+input[type="file"] {
+    margin-bottom: 0;
+}
+
+.clear-file-btn {
+    display: none;
+}
+
+.no-image-error {
+    display: none;
+    margin-left: 1.2rem;
+    text-align: left;
+    font-size: 14px;
+    color: tomato;
+}
+
+.hint-text {
+    float: right;
+    font-size: 14px;
+}
