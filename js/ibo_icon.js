@@ -1,6 +1,6 @@
 /**
  * Version: 1.0.2
- * 
+ *
  * Copyright (C) 2021 - spilymp (https://github.com/spilymp)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -55,7 +55,7 @@ class IBO_ICON {
 
     /**
      * Central function to create the icon based on the parameters from the initialization (see Constructor).
-     * 
+     *
      * @param {*} element - ID of the HTML element to which the icon is attached in the form of a canvas element.
      */
     draw(element) {
@@ -112,7 +112,7 @@ class IBO_ICON {
                 this._ctx.arcTo(0, 0, this.icon_width - radius, 0, radius);
                 break;
             default:
-                console.log("Not supported version selected.");
+                console.log("Unsupported version selected.");
                 break;
         }
         this._ctx.clip();
@@ -122,11 +122,11 @@ class IBO_ICON {
 
     /**
      * Helping function to draw text/symbols to the canvas.
-     * 
+     *
      * @param {*} text      - the text or symbol which should be drawn to the canvas
      * @param {*} color     - the color of the text
      * @param {*} centerX   - text position on the x achsis of the canvas
-     * @param {*} centerY   - text position on the y achsis of the canvas 
+     * @param {*} centerY   - text position on the y achsis of the canvas
      */
     _setText(text, color, centerX, centerY, font_size) {
         this._ctx.save();
@@ -140,7 +140,7 @@ class IBO_ICON {
 
     /**
      * Shade, blend and convert a color.
-     * 
+     *
      * Credit to and Copyright by Pimp Trizkit (https://github.com/PimpTrizkit)
      * Documentation see https://github.com/PimpTrizkit/PJs/wiki/12.-Shade,-Blend-and-Convert-a-Web-Color-(pSBC.js)
      */
@@ -281,7 +281,7 @@ class IBO_ICON {
                 this._ctx.shadowColor = "rgba(0, 0, 0, 0.4)";
                 break;
             default:
-                console.log("Not supported version selected.");
+                console.log("Unsupported version selected.");
                 break;
         }
 
@@ -296,7 +296,7 @@ class IBO_ICON {
     }
 
     /**
-     * Sets an inward shadow for the top and bottom edges of the icon. 
+     * Sets an inward shadow for the top and bottom edges of the icon.
      * Will only be displayed depending on the selected version.
      */
     _setInlineShadow() {
@@ -344,7 +344,7 @@ class IBO_ICON {
                 this._ctx.restore();
                 break;
             default:
-                console.log("Not supported version selected.");
+                console.log("Unsupported version selected.");
                 break;
         }
     }
@@ -376,7 +376,7 @@ class IBO_ICON {
                 this._ctx.restore();
                 break;
             default:
-                console.log("Not supported version selected.");
+                console.log("Unsupported version selected.");
                 break;
         }
     }
