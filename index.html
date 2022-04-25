@@ -39,66 +39,6 @@
     <!-- Weather Icons-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.min.css" rel="stylesheet">
 
-    <script type="text/javascript" src="js/ibo_icon.js"></script>
-
-    <script>
-
-        document.addEventListener("DOMContentLoaded", function () {
-            let icon = new IBO_ICON({
-                'font_family': 'bootstrap-icons',
-                'icon_class': 'bi bi-droplet',
-            });
-            icon.draw("icon");
-        });
-
-        function generate() {
-            document.getElementById("icon").innerHTML = '';
-            let icon = new IBO_ICON({
-                'font_color': document.getElementById('iconFontColor').value,
-                'font_family': document.getElementById('iconSet').value,
-                'icon_background': document.getElementById('iconBackgroundColor').value,
-                'icon_class': document.getElementById('iconClass').value,
-                'odoo_version': document.getElementById('odooVersion').value,
-            });
-            icon.draw("icon");
-        }
-
-        function download() {
-            var image = document.getElementsByClassName('ibo-icon-canvas')[0].toDataURL("image/png").replace("image/png", "image/octet-stream");
-            document.getElementById("download").setAttribute("href", image);
-        }
-
-        function populateIconSetWebsite() {
-            switch (document.getElementById('iconSet').value) {
-                case "Font Awesome 5 Brands":
-                    document.getElementById('iconSetWebsite').href = "https://fontawesome.com/v5/search?m=free&s=brands"
-                    break;
-                case "FontAwesome":
-                    document.getElementById('iconSetWebsite').href = "https://fontawesome.com/v4/icons/"
-                    break;
-                case "bootstrap-icons":
-                    document.getElementById('iconSetWebsite').href = "https://icons.getbootstrap.com/"
-                    break;
-                case "simple-line-icons":
-                    document.getElementById('iconSetWebsite').href = "https://simplelineicons.github.io/"
-                    break;
-                case "remixicon":
-                    document.getElementById('iconSetWebsite').href = "https://remixicon.com/"
-                    break;
-                case "tabler-icons":
-                    document.getElementById('iconSetWebsite').href = "https://tabler-icons.io/"
-                    break;
-                case "weathericons":
-                    document.getElementById('iconSetWebsite').href = "http://erikflowers.github.io/weather-icons/"
-                    break;
-                default:
-                    document.getElementById('iconSetWebsite').href = "https://fontawesome.com/v5/search?m=free&s=solid%2Cregular"
-                    break;
-            }
-        }
-
-    </script>
-
 </head>
 
 <body>
@@ -385,6 +325,66 @@ icon.draw("icon");
             </div>
         </div>
     </footer>
+
+    <script type="text/javascript" src="js/ibo_icon.js"></script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let icon = new IBO_ICON({
+                'font_family': 'bootstrap-icons',
+                'icon_class': 'bi bi-droplet',
+            });
+            icon.draw("icon");
+        });
+
+        function generate() {
+            document.getElementById("icon").innerHTML = '';
+            let icon = new IBO_ICON({
+                'font_color': document.getElementById('iconFontColor').value,
+                'font_family': document.getElementById('iconSet').value,
+                'icon_background': document.getElementById('iconBackgroundColor').value,
+                'icon_class': document.getElementById('iconClass').value,
+                'odoo_version': document.getElementById('odooVersion').value,
+            });
+            icon.draw("icon");
+        }
+
+        function download() {
+            var image = document.getElementsByClassName('ibo-icon-canvas')[0].toDataURL("image/png").replace("image/png", "image/octet-stream");
+            document.getElementById("download").setAttribute("href", image);
+        }
+
+        function populateIconSetWebsite() {
+            switch (document.getElementById('iconSet').value) {
+                case "Font Awesome 5 Brands":
+                    document.getElementById('iconSetWebsite').href = "https://fontawesome.com/v5/search?m=free&s=brands"
+                    break;
+                case "FontAwesome":
+                    document.getElementById('iconSetWebsite').href = "https://fontawesome.com/v4/icons/"
+                    break;
+                case "bootstrap-icons":
+                    document.getElementById('iconSetWebsite').href = "https://icons.getbootstrap.com/"
+                    break;
+                case "simple-line-icons":
+                    document.getElementById('iconSetWebsite').href = "https://simplelineicons.github.io/"
+                    break;
+                case "remixicon":
+                    document.getElementById('iconSetWebsite').href = "https://remixicon.com/"
+                    break;
+                case "tabler-icons":
+                    document.getElementById('iconSetWebsite').href = "https://tabler-icons.io/"
+                    break;
+                case "weathericons":
+                    document.getElementById('iconSetWebsite').href = "http://erikflowers.github.io/weather-icons/"
+                    break;
+                default:
+                    document.getElementById('iconSetWebsite').href = "https://fontawesome.com/v5/search?m=free&s=solid%2Cregular"
+                    break;
+            }
+        }
+
+    </script>
 </body>
 
 </html>
