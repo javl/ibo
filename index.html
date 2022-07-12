@@ -126,6 +126,18 @@
                 </div>
 
                 <div class="row">
+                    <div class="column column-top align-right">
+                        <label for="imgSrc">Image</label>
+                        <span class="text-muted">Square images work best</span>
+                    </div>
+                    <div class="column align-left">
+                        <input type="file" id="file-input" />
+                        <button class="button button-clear clear-file-btn"><i class="fas fa-times"></i> remove image</button>
+                        <span class="not-an-image-error" class="file-error">The selected file is not an image.</span>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="column align-right">
 
                         <button class="button button-outline" type="submit" value="Switch Settings" onclick="toggle_settings()">
@@ -166,10 +178,10 @@
                     <div class="column">
                         <div class="row" id="iconSize">
                             <div class="column column-center">
-                                <input id="iconSizeSlider" type="range" value="300" min="100" max="800" oninput="document.getElementById('iconSizeValue').value = this.value">
+                                <input id="iconSizeSlider" type="range" value="300" min="100" max="800" oninput="document.getElementById('iconSizeValue').value = this.value; generate()">
                             </div>
                             <div class="column column-center">
-                                <input id="iconSizeValue" type="text" value="300">
+                                <input id="iconSizeValue" type="text" value="300" onchange="generate()">
                             </div>
                         </div>
                     </div>
@@ -183,10 +195,10 @@
                     <div class="column">
                         <div class="row" id="iconFontSize">
                             <div class="column column-center">
-                                <input id="iconFontSizeSlider" type="range" value="150" min="00" max="800" oninput="document.getElementById('iconFontSizeValue').value = this.value">
+                                <input id="iconFontSizeSlider" type="range" value="150" min="00" max="800" oninput="document.getElementById('iconFontSizeValue').value = this.value; generate()">
                             </div>
                             <div class="column column-center">
-                                <input id="iconFontSizeValue" type="text" value="150">
+                                <input id="iconFontSizeValue" type="text" value="150" onchange="generate()">
                             </div>
                         </div>
                     </div>

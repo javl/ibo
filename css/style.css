@@ -76,3 +76,22 @@ footer {
 .settings-card.deactivated {
     display: none;
 }
+
+.clear-file-btn {
+    padding-left: 0 !important;
+    display: none;
+}
+
+.text-muted {
+    color: #969696;
+    font-size: .8em;
+}
+.not-an-image-error {
+    font-size: .8em;
+    color: tomato;
+    display: none;
+}
+
+input[type="file"] {
+    margin: 0;
+}
