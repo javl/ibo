@@ -138,6 +138,26 @@
                 </div>
 
                 <div class="row">
+
+                    <div class="column column-center align-right">
+                        <label for="iconSize">Image Scale</label>
+                        <div class="text-muted">Percentage relative to final icon size</div>
+                    </div>
+                    <div class="column">
+                        <div class="row" id="imageScale">
+                            <div class="column column-center">
+                                <input id="imageScaleSlider" type="range" value="300" min="1" max="100" oninput="document.getElementById('imageScaleValue').value = this.value; generate()">
+                            </div>
+                            <div class="column column-center">
+                                <input id="imageScaleValue" type="text" value="100" onchange="generate()">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
                     <div class="column align-right">
 
                         <button class="button button-outline" type="submit" value="Switch Settings" onclick="toggle_settings()">

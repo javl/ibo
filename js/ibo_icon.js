@@ -110,21 +110,17 @@ class IBO_ICON {
             this.img.onload = () => {
                 // first store a bunch of values used for drawing later
                 this.img_settings = {};
-                if (this.img.width > this.img.height) {
-                    this.img_settings.scale = this.canvas.width / this.img.width;
+                if (this.img.width >= this.img.height) {
                     this.img_settings.ratio = this.img.height / this.img.width;
-                    this.img_settings.x = 0;
-                    this.img_settings.y = this.canvas.height / 2 - (this.img.height * this.img_settings.scale) / 2;
-                    this.img_settings.w = this.canvas.width;
-                    this.img_settings.h = this.canvas.height * this.img_settings.ratio;
+                    this.img_settings.w = this.canvas.width * this.image_scale;
+                    this.img_settings.h = (this.canvas.height * this.img_settings.ratio) * this.image_scale;
                 } else {
-                    this.img_settings.scale = this.canvas.height / this.img.height;
                     this.img_settings.ratio = this.img.width / this.img.height;
-                    this.img_settings.x = this.canvas.width / 2 - (this.img.width * this.img_settings.scale) / 2;
-                    this.img_settings.y = 0;
-                    this.img_settings.w = this.canvas.width * this.img_settings.ratio;
-                    this.img_settings.h = this.canvas.height;
+                    this.img_settings.w = (this.canvas.width * this.img_settings.ratio) * this.image_scale;
+                    this.img_settings.h = this.canvas.height * this.image_scale;
                 }
+                this.img_settings.x = this.canvas.width / 2 - this.img_settings.w / 2;
+                this.img_settings.y = this.canvas.height / 2 - this.img_settings.h / 2;
 
                 // Like with the text we'll draw the image multiple times to create a shadow. For this we use a
                 // temporary canvas we can tint
@@ -581,6 +577,7 @@ function generate() {
         'icon_background': document.getElementById('iconBackgroundColor').value,
         'icon_class': document.getElementById('iconClass').value,
         'icon_width': parseInt(document.getElementById('iconSizeValue').value),
+        'image_scale': parseInt(document.getElementById('imageScaleValue').value) / 100.0,
         'odoo_version': document.getElementById('odooVersion').value,
     });
     icon.draw("icon");
