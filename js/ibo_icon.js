@@ -585,7 +585,7 @@ class IBO_ICON {
     }
 }
 
-document.addEventListener("load", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const clear_file_btn = document.querySelector('.clear-file-btn');
     const input_field = document.querySelector("#file-input");
     const not_an_image_error = document.querySelector('.not-an-image-error');
@@ -606,7 +606,6 @@ document.addEventListener("load", function () {
         }
         generate();
     });
-
     generate();
 });
 
