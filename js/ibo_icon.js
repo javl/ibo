@@ -175,26 +175,26 @@ class IBO_ICON {
     /**
      * Helper function to draw the main image to the canvas
      */
-    _setMainImage() {
+     _setMainImage() {
         if (this.img !== null) {
             this._setImage(this.img, 0, 0);
         }
     }
 
     /**
- * Function to draw svg/image to the canvas.
- * @param {*} img       - what image to draw
- * @param {*} x_offset  - offset x position of image
- * @param {*} y_offset  - offset y position of image
- */
-        _setImage(img, x_offset, y_offset) {
+     * Function to draw svg/image to the canvas.
+     * @param {*} img       - what image to draw
+     * @param {*} x_offset  - offset x position of image
+     * @param {*} y_offset  - offset y position of image
+     */
+    _setImage(img, x_offset, y_offset) {
         this._ctx.drawImage(
             img,
             x_offset, y_offset,
             img.width, img.height,
             this.img_settings.x, this.img_settings.y,
             this.img_settings.w, this.img_settings.h);
-        }
+    }
 
     /**
      * Function to draw img to the canvas with some shadow.
@@ -205,23 +205,6 @@ class IBO_ICON {
         }
 
         this._ctx.save();
-
-        // switch (this.odoo_version) {
-        //     case "11.0":
-        //         break;
-        //     case "12.0":
-        //     case "13.0":
-        //     case "14.0":
-        //     case "15.0":
-        //         this._ctx.shadowOffsetX = 0;
-        //         this._ctx.shadowOffsetY = this.icon_width * 0.02;
-        //         this._ctx.shadowBlur = 0;
-        //         this._ctx.shadowColor = "rgba(0, 0, 0, 0.4)";
-        //         break;
-        //     default:
-        //         console.log("Unsupported version selected.");
-        //         break;
-        // }
 
         this._setImage(this.img, 0, 0);
         this._ctx.restore();
@@ -255,7 +238,7 @@ class IBO_ICON {
                 this._ctx.arcTo(0, 0, this.icon_width - radius, 0, radius);
                 break;
             default:
-                console.log("Not supported version selected.");
+                console.log("Unsupported version selected.");
                 break;
         }
         this._ctx.clip();
@@ -418,12 +401,11 @@ class IBO_ICON {
         }
     }
 
-
     /**
      * Sets a lighter shadow that extends to the lower left corner of the icon.
      */
     _setTextWithShadow() {
-        if (this.icon_text == "none") {
+        if (this.icon_text == "none") {  // skip if there is no icon set
             return;
         }
 
@@ -442,9 +424,10 @@ class IBO_ICON {
                 this._ctx.shadowColor = "rgba(0, 0, 0, 0.4)";
                 break;
             default:
-                console.log("Not supported version selected.");
+                console.log("Unsupported version selected.");
                 break;
         }
+
         this._setText(
             this.icon_text,
             this.font_color,
@@ -504,7 +487,7 @@ class IBO_ICON {
                 this._ctx.restore();
                 break;
             default:
-                console.log("Not supported version selected.");
+                console.log("Unsupported version selected.");
                 break;
         }
     }
@@ -536,7 +519,7 @@ class IBO_ICON {
                 this._ctx.restore();
                 break;
             default:
-                console.log("Not supported version selected.");
+                console.log("Unsupported version selected.");
                 break;
         }
     }
