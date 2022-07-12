@@ -1,6 +1,6 @@
 /**
  * Version: 1.0.2
- * 
+ *
  * Copyright (C) 2021 - spilymp (https://github.com/spilymp)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -55,7 +55,7 @@ class IBO_ICON {
 
     /**
      * Central function to create the icon based on the parameters from the initialization (see Constructor).
-     * 
+     *
      * @param {*} element - ID of the HTML element to which the icon is attached in the form of a canvas element.
      */
     draw(element) {
@@ -122,11 +122,11 @@ class IBO_ICON {
 
     /**
      * Helping function to draw text/symbols to the canvas.
-     * 
+     *
      * @param {*} text      - the text or symbol which should be drawn to the canvas
      * @param {*} color     - the color of the text
      * @param {*} centerX   - text position on the x achsis of the canvas
-     * @param {*} centerY   - text position on the y achsis of the canvas 
+     * @param {*} centerY   - text position on the y achsis of the canvas
      */
     _setText(text, color, centerX, centerY, font_size) {
         this._ctx.save();
@@ -140,7 +140,7 @@ class IBO_ICON {
 
     /**
      * Shade, blend and convert a color.
-     * 
+     *
      * Credit to and Copyright by Pimp Trizkit (https://github.com/PimpTrizkit)
      * Documentation see https://github.com/PimpTrizkit/PJs/wiki/12.-Shade,-Blend-and-Convert-a-Web-Color-(pSBC.js)
      */
@@ -296,7 +296,7 @@ class IBO_ICON {
     }
 
     /**
-     * Sets an inward shadow for the top and bottom edges of the icon. 
+     * Sets an inward shadow for the top and bottom edges of the icon.
      * Will only be displayed depending on the selected version.
      */
     _setInlineShadow() {
@@ -399,5 +399,76 @@ class IBO_ICON {
         // Logging for debug purposes
         // console.log("Unicode: " + char + " # Font-Weight: " + font_weight);
         return [char, font_weight];
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    let icon = new IBO_ICON({
+        'font_family': 'bootstrap-icons',
+        'icon_class': 'bi bi-droplet',
+    });
+    icon.draw("icon");
+});
+
+function generate() {
+    document.getElementById("icon").innerHTML = '';
+    let icon = new IBO_ICON({
+        'font_color': document.getElementById('iconFontColor').value,
+        'font_family': document.getElementById('iconSet').value,
+        'font_size': document.getElementById('iconFontSizeValue').value,
+        'font_weight': document.getElementById('fontWeight').value,
+        'icon_background': document.getElementById('iconBackgroundColor').value,
+        'icon_class': document.getElementById('iconClass').value,
+        'icon_width': document.getElementById('iconSizeValue').value,
+        'odoo_version': document.getElementById('odooVersion').value,
+    });
+    icon.draw("icon");
+}
+
+function toggle_settings() {
+    document.querySelectorAll('.settings-card').forEach(function (element) {
+        element.classList.toggle('deactivated');
+    });
+}
+
+function download() {
+    let image = document.getElementsByClassName('ibo-icon-canvas')[0].toDataURL("image/png").replace("image/png", "image/octet-stream");
+    document.getElementById('download').setAttribute('href', image);
+}
+
+function populateIconSetWebsite() {
+    switch (document.getElementById('iconSet').value) {
+        case "Font Awesome 5 Brands":
+            document.getElementById('iconSetWebsite').href = "https://fontawesome.com/v5/search?m=free&s=brands"
+            document.getElementById('iconClass').placeholder = "e.g. fab fa-github"
+            break;
+        case "FontAwesome":
+            document.getElementById('iconSetWebsite').href = "https://fontawesome.com/v4/icons/"
+            document.getElementById('iconClass').placeholder = "e.g. fa fa-bath"
+            break;
+        case "bootstrap-icons":
+            document.getElementById('iconSetWebsite').href = "https://icons.getbootstrap.com/"
+            document.getElementById('iconClass').placeholder = "e.g. bi bi-droplet"
+            break;
+        case "simple-line-icons":
+            document.getElementById('iconSetWebsite').href = "https://simplelineicons.github.io/"
+            document.getElementById('iconClass').placeholder = "e.g. icon-globe-alt"
+            break;
+        case "remixicon":
+            document.getElementById('iconSetWebsite').href = "https://remixicon.com/"
+            document.getElementById('iconClass').placeholder = "e.g. ri-customer-service-line"
+            break;
+        case "tabler-icons":
+            document.getElementById('iconSetWebsite').href = "https://tabler-icons.io/"
+            document.getElementById('iconClass').placeholder = "e.g. ti ti-bone-off"
+            break;
+        case "weathericons":
+            document.getElementById('iconSetWebsite').href = "http://erikflowers.github.io/weather-icons/"
+            document.getElementById('iconClass').placeholder = "e.g. wi-day-sleet-storm"
+            break;
+        default:
+            document.getElementById('iconSetWebsite').href = "https://fontawesome.com/v5/search?m=free&s=solid%2Cregular"
+            document.getElementById('iconClass').placeholder = "e.g. fas fa-carrot"
+            break;
     }
 }
