@@ -43,8 +43,16 @@ footer {
     font-size: 0.8em;
 }
 
-.icon {
-    max-width: 300px;
+.main-container {
+    width: 1200px;
+}
+
+#icon {
+    min-height: 500px;
+}
+
+#icon canvas {
+    max-width: 500px;
 }
 
 .visibility-hidden {
