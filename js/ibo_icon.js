@@ -152,7 +152,6 @@ class IBO_ICON {
                         data[i + 2] = shadowRgb[2];
                     }
                 }
-                // svgCtx.putImageData(svgData, 0, 0, 0, 0, this.img_settings.w, this.img_settings.h);
                 svgCtx.putImageData(svgData, 0, 0);
                 this.img_shadow = new Image();
                 this.img_shadow.onload = () => {
@@ -188,25 +187,9 @@ class IBO_ICON {
     _setImage(img, x_offset, y_offset) {
         this._ctx.drawImage(
             img,
-            x_offset, y_offset,
-            img.width, img.height,
-            this.img_settings.x, this.img_settings.y,
+            x_offset + this.canvas.width / 2 - this.img_settings.w / 2,
+            y_offset + this.canvas.height / 2 - this.img_settings.h / 2,
             this.img_settings.w, this.img_settings.h);
-    }
-
-    /**
-     * Function to draw img to the canvas with some shadow.
-     */
-    _setImageWithShadow() {
-        if (this.img === null) {
-            return;
-        }
-
-        this._ctx.save();
-
-        this._setImage(this.img, 0, 0);
-        this._ctx.restore();
-
     }
 
     /**
@@ -394,7 +377,10 @@ class IBO_ICON {
             for (let i = 0; i < this.img_shadow.width / 2; i++) {
                 const x_offset = ((this.icon_width - 2 * i) / 2) - (this.img_shadow.width / 2);
                 const y_offset = ((this.icon_width + 2 * i) / 2) - (this.img_shadow.width / 2);
-                this._setImage(this.img_shadow, -x_offset, -y_offset);
+                this._ctx.drawImage(
+                    this.img_shadow,
+                    x_offset, y_offset
+                )
             }
         }
     }
@@ -557,6 +543,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     input_field.addEventListener('change', (e) => {
         if (e.target.value) {
+            not_an_image_error.style.display = 'none';
             clear_file_btn.style.display = 'inline-block';
         } else {
             clear_file_btn.style.display = 'none';
