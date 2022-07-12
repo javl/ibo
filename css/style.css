@@ -26,18 +26,42 @@ h3 {
     text-align: right;
 }
 
+.align-left {
+    text-align: left;
+}
+
 label {
     text-align: right;
 }
 
 hr {
     border: solid 1px #d2d2d2;
-    width : 100%;
+    width: 100%;
 }
 
 footer {
     font-size: 0.8em;
 }
+
+.main-container {
+    width: 1200px;
+}
+
+#icon {
+    min-height: 500px;
+}
+
+#icon canvas {
+    max-width: 500px;
+}
+
+.visibility-hidden {
+    visibility: hidden;
+}
+
+/**
+ * Special classes for the button to open icon websites.
+ */
 
 .icon-set-website .column:nth-child(2) {
     padding-right: 0rem;
@@ -48,29 +72,34 @@ footer {
     width: 100%;
 }
 
-.icon-set-website .column:nth-child(3) a i {
-    padding-bottom: 0.3rem;
+.button-icon {
+    padding-bottom: 0.4rem;
     font-size: 2rem;
     vertical-align: middle;
 }
 
-input[type="file"] {
-    margin-bottom: 0;
+/**
+ * Special classe to toggle the settings.
+ */
+.settings-card.deactivated {
+    display: none;
 }
 
 .clear-file-btn {
+    padding-left: 0 !important;
     display: none;
 }
 
-.no-image-error {
-    display: none;
-    margin-left: 1.2rem;
-    text-align: left;
-    font-size: 14px;
+.text-muted {
+    color: #969696;
+    font-size: .8em;
+}
+.not-an-image-error {
+    font-size: .8em;
     color: tomato;
+    display: none;
 }
 
-.hint-text {
-    float: right;
-    font-size: 14px;
+input[type="file"] {
+    margin: 0;
 }

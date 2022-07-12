@@ -24,7 +24,7 @@ class IBO_ICON {
         // set default parameter
         this.font_color = "#ffffff";
         this.font_family = "Font Awesome 5 Free";
-        this.font_weight = "900";
+        this.font_weight = 900;
         this.icon_background = "#9b4dca";
         this.icon_class = "fas fa-address-card";
         this.icon_width = 300;
@@ -74,6 +74,7 @@ class IBO_ICON {
         this._setTextWithShadow();
         this._setInlineShadow();
         this._setGradient();
+        document.querySelectorAll('canvas').forEach((elem) => elem.remove());
         document.getElementById(element).appendChild(this.canvas);
     }
 
@@ -81,6 +82,7 @@ class IBO_ICON {
      * Set up canvas and get context
      */
     _setUp() {
+        // Clear any old canvas elements
         this.canvas = document.createElement("canvas");
         this.canvas.setAttribute("class", "ibo-icon-canvas");
         this.canvas.height = this.icon_width;
@@ -99,7 +101,7 @@ class IBO_ICON {
             return;
         }
         if (!fileInput.files[0].type.match("image.*")) {
-            document.querySelector('.no-image-error').style.display = 'block';
+            document.querySelector('.not-an-image-error').style.display = 'block';
             return;
         }
 
@@ -108,21 +110,17 @@ class IBO_ICON {
             this.img.onload = () => {
                 // first store a bunch of values used for drawing later
                 this.img_settings = {};
-                if (this.img.width > this.img.height) {
-                    this.img_settings.scale = this.canvas.width / this.img.width;
+                if (this.img.width >= this.img.height) {
                     this.img_settings.ratio = this.img.height / this.img.width;
-                    this.img_settings.x = 0;
-                    this.img_settings.y = this.canvas.height / 2 - (this.img.height * this.img_settings.scale) / 2;
-                    this.img_settings.w = this.canvas.width;
-                    this.img_settings.h = this.canvas.height * this.img_settings.ratio;
+                    this.img_settings.w = this.canvas.width * this.image_scale;
+                    this.img_settings.h = (this.canvas.height * this.img_settings.ratio) * this.image_scale;
                 } else {
-                    this.img_settings.scale = this.canvas.height / this.img.height;
                     this.img_settings.ratio = this.img.width / this.img.height;
-                    this.img_settings.x = this.canvas.width / 2 - (this.img.width * this.img_settings.scale) / 2;
-                    this.img_settings.y = 0;
-                    this.img_settings.w = this.canvas.width * this.img_settings.ratio;
-                    this.img_settings.h = this.canvas.height;
+                    this.img_settings.w = (this.canvas.width * this.img_settings.ratio) * this.image_scale;
+                    this.img_settings.h = this.canvas.height * this.image_scale;
                 }
+                this.img_settings.x = this.canvas.width / 2 - this.img_settings.w / 2;
+                this.img_settings.y = this.canvas.height / 2 - this.img_settings.h / 2;
 
                 // Like with the text we'll draw the image multiple times to create a shadow. For this we use a
                 // temporary canvas we can tint
@@ -154,7 +152,6 @@ class IBO_ICON {
                         data[i + 2] = shadowRgb[2];
                     }
                 }
-                // svgCtx.putImageData(svgData, 0, 0, 0, 0, this.img_settings.w, this.img_settings.h);
                 svgCtx.putImageData(svgData, 0, 0);
                 this.img_shadow = new Image();
                 this.img_shadow.onload = () => {
@@ -170,6 +167,29 @@ class IBO_ICON {
                 this.img.src = file.target.result;
             }
         })
+    }
+
+    /**
+     * Helper function to draw the main image to the canvas
+     */
+     _setMainImage() {
+        if (this.img !== null) {
+            this._setImage(this.img, 0, 0);
+        }
+    }
+
+    /**
+     * Function to draw svg/image to the canvas.
+     * @param {*} img       - what image to draw
+     * @param {*} x_offset  - offset x position of image
+     * @param {*} y_offset  - offset y position of image
+     */
+    _setImage(img, x_offset, y_offset) {
+        this._ctx.drawImage(
+            img,
+            x_offset + this.canvas.width / 2 - this.img_settings.w / 2,
+            y_offset + this.canvas.height / 2 - this.img_settings.h / 2,
+            this.img_settings.w, this.img_settings.h);
     }
 
     /**
@@ -216,8 +236,7 @@ class IBO_ICON {
      * @param {*} centerY   - text position on the y achsis of the canvas
      */
     _setText(text, color, centerX, centerY, font_size) {
-        // skip if no text set
-        if (text == "none") {
+        if (text == "none") { // skip if no text set
             return;
         }
         this._ctx.save();
@@ -414,7 +433,10 @@ class IBO_ICON {
             for (let i = 0; i < this.img_shadow.width / 2; i++) {
                 const x_offset = ((this.icon_width - 2 * i) / 2) - (this.img_shadow.width / 2);
                 const y_offset = ((this.icon_width + 2 * i) / 2) - (this.img_shadow.width / 2);
-                this._setImage(this.img_shadow, -x_offset, -y_offset);
+                this._ctx.drawImage(
+                    this.img_shadow,
+                    x_offset, y_offset
+                )
             }
         }
     }
@@ -423,8 +445,7 @@ class IBO_ICON {
      * Sets a lighter shadow that extends to the lower left corner of the icon.
      */
     _setTextWithShadow() {
-        // skip if there is no icon set
-        if (this.icon_text == "none") {
+        if (this.icon_text == "none") {  // skip if there is no icon set
             return;
         }
 
@@ -561,5 +582,94 @@ class IBO_ICON {
         // Logging for debug purposes
         // console.log("Unicode: " + char + " # Font-Weight: " + font_weight);
         return [char, font_weight];
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const clear_file_btn = document.querySelector('.clear-file-btn');
+    const input_field = document.querySelector("#file-input");
+    const not_an_image_error = document.querySelector('.not-an-image-error');
+
+    clear_file_btn.addEventListener('click', (e)=>{
+        e.target.style.display = 'none';
+        input_field.value = null;
+        not_an_image_error.style.display = 'none';
+        generate();
+    })
+
+    input_field.addEventListener('change', (e) => {
+        if (e.target.value) {
+            not_an_image_error.style.display = 'none';
+            clear_file_btn.style.display = 'inline-block';
+        } else {
+            clear_file_btn.style.display = 'none';
+        }
+        generate();
+    });
+
+    generate();
+});
+
+function generate() {
+    document.getElementById("icon").innerHTML = '';
+    let icon = new IBO_ICON({
+        'font_color': document.getElementById('iconFontColor').value,
+        'font_family': document.getElementById('iconSet').value,
+        'font_size': parseInt(document.getElementById('iconFontSizeValue').value),
+        'font_weight': parseInt(document.getElementById('fontWeight').value),
+        'icon_background': document.getElementById('iconBackgroundColor').value,
+        'icon_class': document.getElementById('iconClass').value,
+        'icon_width': parseInt(document.getElementById('iconSizeValue').value),
+        'image_scale': parseInt(document.getElementById('imageScaleValue').value) / 100.0,
+        'odoo_version': document.getElementById('odooVersion').value,
+    });
+    icon.draw("icon");
+}
+
+function toggle_settings() {
+    document.querySelectorAll('.settings-card').forEach(function (element) {
+        element.classList.toggle('deactivated');
+    });
+}
+
+function download() {
+    let image = document.getElementsByClassName('ibo-icon-canvas')[0].toDataURL("image/png").replace("image/png", "image/octet-stream");
+    document.getElementById('download').setAttribute('href', image);
+}
+
+function populateIconSetWebsite() {
+    switch (document.getElementById('iconSet').value) {
+        case "Font Awesome 5 Brands":
+            document.getElementById('iconSetWebsite').href = "https://fontawesome.com/v5/search?m=free&s=brands"
+            document.getElementById('iconClass').placeholder = "e.g. fab fa-github"
+            break;
+        case "FontAwesome":
+            document.getElementById('iconSetWebsite').href = "https://fontawesome.com/v4/icons/"
+            document.getElementById('iconClass').placeholder = "e.g. fa fa-bath"
+            break;
+        case "bootstrap-icons":
+            document.getElementById('iconSetWebsite').href = "https://icons.getbootstrap.com/"
+            document.getElementById('iconClass').placeholder = "e.g. bi bi-droplet"
+            break;
+        case "simple-line-icons":
+            document.getElementById('iconSetWebsite').href = "https://simplelineicons.github.io/"
+            document.getElementById('iconClass').placeholder = "e.g. icon-globe-alt"
+            break;
+        case "remixicon":
+            document.getElementById('iconSetWebsite').href = "https://remixicon.com/"
+            document.getElementById('iconClass').placeholder = "e.g. ri-customer-service-line"
+            break;
+        case "tabler-icons":
+            document.getElementById('iconSetWebsite').href = "https://tabler-icons.io/"
+            document.getElementById('iconClass').placeholder = "e.g. ti ti-bone-off"
+            break;
+        case "weathericons":
+            document.getElementById('iconSetWebsite').href = "http://erikflowers.github.io/weather-icons/"
+            document.getElementById('iconClass').placeholder = "e.g. wi-day-sleet-storm"
+            break;
+        default:
+            document.getElementById('iconSetWebsite').href = "https://fontawesome.com/v5/search?m=free&s=solid%2Cregular"
+            document.getElementById('iconClass').placeholder = "e.g. fas fa-carrot"
+            break;
     }
 }
