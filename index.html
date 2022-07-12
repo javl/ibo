@@ -86,7 +86,7 @@
                     </div>
 
                     <div class="column column-40">
-                        <select id="iconSet" onchange="populateIconSetWebsite()">
+                        <select id="iconSet" onchange="populateIconSetWebsite(); generate()">
                             <option value="Font Awesome 5 Free">Font Awesome 5 Solid & Regular</option>
                             <option value="Font Awesome 5 Brands">Font Awesome 5 Brands</option>
                             <option value="FontAwesome">Font Awesome 4.7</option>
@@ -110,8 +110,8 @@
                     <div class="column column-center">
                         <label for="iconClass">Icon Class</label><i id="icon-preview"></i>
                     </div>
-                    <div class="column">
-                        <input id="iconClass" type="text" placeholder="e.g. fas fa-address-card" value="bi-droplet">
+                    <div class="column align-left">
+                        <input id="iconClass" type="text" placeholder="e.g. bi bi-droplet" value="bi-droplet" onchange="generate()">
                     </div>
                 </div>
 
@@ -172,8 +172,9 @@
 
                 <div class="row">
 
-                    <div class="column column-center">
+                    <div class="column column-center align-right">
                         <label for="iconSize">Icon Size</label>
+                        <div class="text-muted">default: 300</div>
                     </div>
                     <div class="column">
                         <div class="row" id="iconSize">
@@ -189,8 +190,9 @@
                 </div>
 
                 <div class="row">
-                    <div class="column column-center">
+                    <div class="column column-center align-right">
                         <label for="iconFontSize">Icon Font Size</label>
+                        <div class="text-muted">default: 150</div>
                     </div>
                     <div class="column">
                         <div class="row" id="iconFontSize">
