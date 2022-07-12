@@ -97,7 +97,7 @@ class IBO_ICON {
         this.img_shadow = null;
 
         const fileInput = document.querySelector("#file-input");
-        if (fileInput.files.length == 0) {
+        if (fileInput.files.length === 0) {
             return;
         }
         if (!fileInput.files[0].type.match("image.*")) {
@@ -236,7 +236,7 @@ class IBO_ICON {
      * @param {*} centerY   - text position on the y achsis of the canvas
      */
     _setText(text, color, centerX, centerY, font_size) {
-        if (text == "none") { // skip if no text set
+        if (text === "none") { // skip if no text set
             return;
         }
         this._ctx.save();
@@ -320,7 +320,7 @@ class IBO_ICON {
             h,
             i = parseInt,
             m = Math.round,
-            a = typeof c1 == "string";
+            a = typeof c1 === "string";
         if (
             typeof p != "number" ||
             p < -1 ||
@@ -337,12 +337,12 @@ class IBO_ICON {
                 if (n > 9) {
                     ([r, g, b, a] = d = d.split(",")), (n = d.length);
                     if (n < 3 || n > 4) return null;
-                    (x.r = i(r[3] == "a" ? r.slice(5) : r.slice(4))),
+                    (x.r = i(r[3] === "a" ? r.slice(5) : r.slice(4))),
                         (x.g = i(g)),
                         (x.b = i(b)),
                         (x.a = a ? parseFloat(a) : -1);
                 } else {
-                    if (n == 8 || n == 6 || n < 4) return null;
+                    if (n === 8 || n === 6 || n < 4) return null;
                     if (n < 6)
                         d =
                             "#" +
@@ -354,7 +354,7 @@ class IBO_ICON {
                             d[3] +
                             (n > 4 ? d[4] + d[4] : "");
                     d = i(d.slice(1), 16);
-                    if (n == 9 || n == 5)
+                    if (n === 9 || n === 5)
                         (x.r = (d >> 24) & 255),
                             (x.g = (d >> 16) & 255),
                             (x.b = (d >> 8) & 255),
@@ -368,7 +368,7 @@ class IBO_ICON {
                 return x;
             };
         (h = c0.length > 9),
-            (h = a ? (c1.length > 9 ? true : c1 == "c" ? !h : false) : h),
+            (h = a ? (c1.length > 9 ? true : c1 === "c" ? !h : false) : h),
             (f = this.pSBCr(c0)),
             (P = p < 0),
             (t =
@@ -445,7 +445,7 @@ class IBO_ICON {
      * Sets a lighter shadow that extends to the lower left corner of the icon.
      */
     _setTextWithShadow() {
-        if (this.icon_text == "none") {  // skip if there is no icon set
+        if (this.icon_text === "none") {  // skip if there is no icon set
             return;
         }
 
