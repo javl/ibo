@@ -403,11 +403,7 @@ class IBO_ICON {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    let icon = new IBO_ICON({
-        'font_family': 'bootstrap-icons',
-        'icon_class': 'bi bi-droplet',
-    });
-    icon.draw("icon");
+    generate();
 });
 
 function generate() {
