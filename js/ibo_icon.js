@@ -74,6 +74,7 @@ class IBO_ICON {
         this._setTextWithShadow();
         this._setInlineShadow();
         this._setGradient();
+        document.querySelectorAll('canvas').forEach((elem) => elem.remove());
         document.getElementById(element).appendChild(this.canvas);
     }
 
@@ -81,6 +82,7 @@ class IBO_ICON {
      * Set up canvas and get context
      */
     _setUp() {
+        // Clear any old canvas elements
         this.canvas = document.createElement("canvas");
         this.canvas.setAttribute("class", "ibo-icon-canvas");
         this.canvas.height = this.icon_width;
