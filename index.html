@@ -117,17 +117,6 @@
 
                 <div class="row">
                     <div class="column column-center">
-                        <label for="imgSrc">Image</label>
-                        <span class="hint-text">Square images work best</span>
-                    </div>
-                    <div class="column">
-                        <input type="file" id="file-input" />
-                        <button class="button button-outline clear-file-btn"><i class="fas fa-trash-alt"></i> clear file</button>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="column column-center">
                         <label for="iconBackgroundColor">Icon Background Color</label>
                     </div>
                     <div class="column">
@@ -138,7 +127,7 @@
 
                 <div class="row">
                     <div class="column column-top align-right">
-                        <label for="imgSrc">Image</label>
+                        <label for="file-input">Image</label>
                         <span class="text-muted">Square .svg images work well</span>
                     </div>
                     <div class="column align-left">
@@ -421,6 +410,13 @@ icon.draw("icon");
                             <td>e.g. "300"</td>
                             <td>The width of your icon (in px), will also be the height of your icon.</td>
                         </tr>
+                        <tr>
+                            <td>image_scale</td>
+                            <td>e.g. "100"</td>
+                            <td>How large to draw an uploaded image in relation to the final icon. This value is a percentage,
+                                where 100% means the uploaded images will fill the entire canvas, and 50% fills half of it.</td>
+                        </tr>
+
                         <tr>
                             <td>odoo_version</td>
                             <td>["11.0", "12.0", "13.0", "14.0", "15.0"]</td>
